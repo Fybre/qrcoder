@@ -139,22 +139,22 @@ document.addEventListener("DOMContentLoaded", function () {
     );
   });
 
-  // Toggle dark mode
+  // Toggle light mode (since dark mode is now default)
   function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    const isDarkMode = document.body.classList.contains("dark-mode");
-    darkModeToggle.textContent = isDarkMode ? "☀️ Light Mode" : "🌙 Dark Mode";
+    document.body.classList.toggle("light-mode");
+    const isLightMode = document.body.classList.contains("light-mode");
+    darkModeToggle.textContent = isLightMode ? "🌙 Dark Mode" : "☀️ Light Mode";
 
     // Save preference to localStorage
-    localStorage.setItem("darkMode", isDarkMode);
+    localStorage.setItem("lightMode", isLightMode);
   }
 
-  // Initialize dark mode from localStorage
+  // Initialize light mode from localStorage
   function initializeDarkMode() {
-    const savedDarkMode = localStorage.getItem("darkMode");
-    if (savedDarkMode === "true") {
-      document.body.classList.add("dark-mode");
-      darkModeToggle.textContent = "☀️ Light Mode";
+    const savedLightMode = localStorage.getItem("lightMode");
+    if (savedLightMode === "true") {
+      document.body.classList.add("light-mode");
+      darkModeToggle.textContent = "🌙 Dark Mode";
     }
   }
 
