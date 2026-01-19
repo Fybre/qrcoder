@@ -25,20 +25,41 @@
                 <textarea id="text-input" placeholder="Type your content here..." rows="4"></textarea>
             </div>
 
-            <div class="size-selector">
-                <label for="size-select">QR Code Size:</label>
-                <select id="size-select">
-                    <option value="150">Small (150px)</option>
-                    <option value="250">Medium (250px)</option>
-                    <option value="350" selected>Large (350px)</option>
-                    <option value="500">Extra Large (500px)</option>
-                </select>
+            <div class="options-row">
+                <div class="size-selector">
+                    <label for="size-select">QR Code Size:</label>
+                    <select id="size-select">
+                        <option value="150">Small (150px)</option>
+                        <option value="250">Medium (250px)</option>
+                        <option value="350" selected>Large (350px)</option>
+                        <option value="500">Extra Large (500px)</option>
+                    </select>
+                </div>
+
+                <div class="error-correction-selector">
+                    <label for="error-correction-select">Error Correction:</label>
+                    <select id="error-correction-select">
+                        <option value="L">Low (7%)</option>
+                        <option value="M" selected>Medium (15%)</option>
+                        <option value="Q">Quartile (25%)</option>
+                        <option value="H">High (30%)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="input-info">
+                <span id="url-indicator" class="url-indicator hidden">URL detected</span>
+                <span id="char-count" class="char-count">0 / ~2953 characters</span>
             </div>
         </div>
 
         <div class="qr-display">
             <div id="qrcode" class="qr-code"></div>
-            <button id="download-btn" class="download-btn" disabled>Download QR Code</button>
+            <div class="button-group">
+                <button id="download-btn" class="download-btn" disabled>Download PNG</button>
+                <button id="download-svg-btn" class="download-btn" disabled>Download SVG</button>
+                <button id="copy-btn" class="copy-btn" disabled>Copy to Clipboard</button>
+            </div>
         </div>
     </div>
 
