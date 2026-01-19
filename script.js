@@ -9,6 +9,21 @@ document.addEventListener("DOMContentLoaded", function () {
   // Current QR code canvas
   let currentQrCanvas = null;
 
+  // Helper function to check if text is a URL
+  function isUrl(text) {
+    try {
+      new URL(text);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Helper function to process text (encode if URL)
+  function processText(text) {
+    return isUrl(text) ? encodeURI(text) : text;
+  }
+
   // Initialize QR code generation
   function initializeQRCode() {
     // Set up event listeners
@@ -25,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const text = textInput.value.trim();
 
     if (text) {
-      generateQRCode(text, sizeSelect.value);
+      generateQRCode(processText(text), sizeSelect.value);
       downloadBtn.disabled = false;
     } else {
       clearQRCode();
@@ -38,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const text = textInput.value.trim();
 
     if (text) {
-      generateQRCode(text, sizeSelect.value);
+      generateQRCode(processText(text), sizeSelect.value);
     } else {
       // Update QR code container size even if no text
       qrCodeContainer.style.width = `${sizeSelect.value}px`;
@@ -92,51 +107,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Clear QR code
   function clearQRCode() {
-    if (currentQrCanvas) {
-      qrCodeContainer.removeChild(currentQrCanvas);
-      currentQrCanvas = null;
-    }
     qrCodeContainer.innerHTML = "";
+    currentQrCanvas = null;
   }
 
   // Set up download button
   downloadBtn.addEventListener("click", function () {
-    const text = textInput.value.trim();
-    const size = sizeSelect.value;
+    if (!currentQrCanvas) return;
 
-    if (!text || !currentQrCanvas) return;
-
-    // Create a temporary canvas to generate the QR code image
-    const tempCanvas = document.createElement("canvas");
-    tempCanvas.width = size;
-    tempCanvas.height = size;
-
-    // Draw QR code on temporary canvas
-    QRCode.toCanvas(
-      tempCanvas,
-      text,
-      {
-        width: size,
-        margin: 2,
-        color: {
-          dark: "#000000",
-          light: "#ffffff",
-        },
-      },
-      function (error) {
-        if (error) {
-          console.error("Error generating download QR code:", error);
-          return;
-        }
-
-        // Convert canvas to data URL and trigger download
-        const dataUrl = tempCanvas.toDataURL("image/png");
-        const downloadLink = document.createElement("a");
-        downloadLink.href = dataUrl;
-        downloadLink.download = `qrcode_${new Date().getTime()}.png`;
-        downloadLink.click();
-      },
-    );
+    const dataUrl = currentQrCanvas.toDataURL("image/png");
+    const downloadLink = document.createElement("a");
+    downloadLink.href = dataUrl;
+    downloadLink.download = `qrcode_${Date.now()}.png`;
+    downloadLink.click();
   });
 
   // Toggle light mode (since dark mode is now default)
@@ -149,8 +132,8 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("lightMode", isLightMode);
   }
 
-  // Initialize light mode from localStorage
-  function initializeDarkMode() {
+  // Initialize theme from localStorage
+  function initializeTheme() {
     const savedLightMode = localStorage.getItem("lightMode");
     if (savedLightMode === "true") {
       document.body.classList.add("light-mode");
@@ -160,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Initialize the application
   initializeQRCode();
-  initializeDarkMode();
+  initializeTheme();
 
   // Set up dark mode toggle
   darkModeToggle.addEventListener("click", toggleDarkMode);
